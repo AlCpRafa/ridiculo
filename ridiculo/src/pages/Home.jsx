@@ -1,33 +1,59 @@
-import { useState } from 'react';
-import reactLogo from '../assets/react.svg';
-import viteLogo from '/vite.svg';
+import naturalFolderImage from '../assets/images/inicio/carpeta.png';
+import { eras } from '../data/eras';
 
-function Home() {
-  const [count, setCount] = useState(0);
+const homeEraImages = {
+  'era-natural': naturalFolderImage,
+  'era-digital': naturalFolderImage,
+  'era-consumismo': naturalFolderImage,
+};
 
+function Home({ onNavigate, onOpenEra }) {
   return (
-    <div>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Hola</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <main className="page home-page">
+      <section className="home-hero">
+        <div className="home-title-block">
+          <h1>RID&Iacute;CULO</h1>
+          <div className="dictionary-entry" aria-label="Definicion de ridiculo">
+            <p className="dictionary-origin">
+              <em>Del lat. ridiculus.</em>
+            </p>
+            <ol>
+              <li>
+                <abbr title="adjetivo">adj.</abbr> Que por su rareza o
+                extravagancia mueve o puede mover a risa.
+              </li>
+              <li>
+                <abbr title="sinonimos">Sin.</abbr> irrisorio, grotesco,
+                absurdo, anomalo, extravagante, estrafalario.
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div className="era-links" aria-label="Accesos a las Eras">
+          {eras.map((era, index) => (
+            <button
+              className="era-link"
+              key={era.id}
+              onClick={() => onOpenEra(era.id)}
+              style={{ '--era-index': index }}
+              type="button"
+            >
+              <img src={homeEraImages[era.id]} alt="" />
+              <strong>{era.title}</strong>
+            </button>
+          ))}
+        </div>
+
+        <button
+          className="catalog-text-link"
+          onClick={() => onNavigate('catalog')}
+          type="button"
+        >
+          VER CATALOGO COMPLETO
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+      </section>
+    </main>
   );
 }
 
