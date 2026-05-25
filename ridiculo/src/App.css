@@ -151,9 +151,10 @@
 
 .home-hero {
   display: grid;
-  gap: clamp(40px, 7vw, 80px);
+  gap: clamp(24px, 4vw, 48px);
   min-height: calc(115vh - 196px);
-  align-content: center;
+  align-content: start;
+  padding-top: clamp(56px, 9vh, 120px);
   text-align: center;
 }
 
@@ -227,7 +228,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(20px, 5vw, 64px);
   align-items: start;
-  padding-top: 6vh;
+  padding-top: clamp(8px, 2vh, 24px);
 }
 
 .era-link {
