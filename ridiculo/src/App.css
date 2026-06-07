@@ -265,12 +265,23 @@
 }
 
 .era-link strong {
-  max-width: 260px;
+  display: grid;
+  gap: 4px;
+  width: min(100%, 260px);
+  justify-self: center;
   font-family: "Clash Display", ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  font-size: clamp(1.55rem, 2.7vw, 2.25rem);
   line-height: 0.92;
   min-height: 1.84em;
+  overflow: hidden;
+  text-align: center;
   text-transform: uppercase;
+}
+
+.era-link strong span {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
 }
 
 .era-link:hover {
@@ -1156,6 +1167,10 @@
   .era-link img {
     width: 220px;
     height: 220px;
+  }
+
+  .era-link strong {
+    width: 220px;
   }
 
   .dictionary-entry li {

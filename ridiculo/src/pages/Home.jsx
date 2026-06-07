@@ -40,7 +40,13 @@ function Home({ onNavigate, onOpenEra }) {
               type="button"
             >
               <img src={homeEraImages[era.id]} alt="" />
-              <strong>{era.title}</strong>
+              <strong>
+                {era.title.split(' ').map((word) => (
+                  <span className={`era-word era-word--${word.toLowerCase()}`} key={word}>
+                    {word}
+                  </span>
+                ))}
+              </strong>
             </button>
           ))}
         </div>
@@ -50,7 +56,7 @@ function Home({ onNavigate, onOpenEra }) {
           onClick={() => onNavigate('catalog')}
           type="button"
         >
-          VER CATALOGO COMPLETO
+          VER CATÁLOGO COMPLETO
         </button>
       </section>
     </main>
