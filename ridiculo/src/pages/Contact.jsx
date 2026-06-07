@@ -34,14 +34,29 @@ function Contact() {
     <main className="page contact-page">
       <section className="contact-hero">
         <div className="contact-copy">
-          <p className="eyebrow">Contacto</p>
-          <h1>Mandame tu idea para colaborar</h1>
-          <p>
-            Si el proyecto te mueve algo, si quieres proponer una pieza, una
-            conversacion o una colaboracion, escribeme.
-          </p>
+          <h1>Mándame tu idea</h1>
+          <div className="contact-intro">
+            <p>Ridículo nace como un proyecto editorial abierto al diálogo.</p>
+            <p>
+              Cada edición surge de una inquietud concreta, pero las inquietudes
+              nunca pertenecen a una sola persona. Por ello, este espacio está
+              pensado para recibir propuestas, reflexiones, experiencias o
+              problemáticas que merezcan ser observadas desde una mirada
+              crítica y audiovisual.
+            </p>
+            <p>
+              Si existe un tema que consideras relevante, una realidad que
+              crees que está siendo ignorada o una idea que podría formar parte
+              de futuras ediciones, este es el lugar para compartirla.
+            </p>
+            <p>
+              Las próximas editoriales podrán construirse de forma
+              colaborativa, incorporando nuevas perspectivas, voces y
+              experiencias.
+            </p>
+          </div>
 
-          <div className="contact-cards" aria-label="Datos de contacto">
+          <div className="contact-links" aria-label="Datos de contacto">
             <a href={`mailto:${contactEmail}`}>
               <span>Gmail</span>
               <strong>{contactEmail}</strong>
@@ -83,7 +98,7 @@ function Contact() {
             <textarea
               name="message"
               onChange={handleChange}
-              placeholder="Cuentame que tienes en mente..."
+              placeholder="Cuéntame qué tienes en mente..."
               required
               rows="7"
               value={formData.message}

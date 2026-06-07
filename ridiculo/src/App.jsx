@@ -9,7 +9,7 @@ import Home from './pages/Home';
 const pages = [
   { id: 'home', label: 'Inicio' },
   { id: 'catalog', label: 'Catálogo' },
-  { id: 'about', label: 'Sobre mí' },
+  { id: 'about', label: 'Ridículo' },
   { id: 'contact', label: 'Contacto' },
 ];
 
