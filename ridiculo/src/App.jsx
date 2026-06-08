@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './App.css';
 import About from './pages/About';
-import Article from './pages/Article';
 import Catalog from './pages/Catalog';
 import Contact from './pages/Contact';
 import Home from './pages/Home';
@@ -15,22 +14,18 @@ const pages = [
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [selectedEra, setSelectedEra] = useState(null);
-  const activePage = currentPage === 'article' ? 'catalog' : currentPage;
+
+  const openCatalogEra = (eraId) => {
+    setCurrentPage('catalog');
+    window.setTimeout(() => {
+      document.getElementById(eraId)?.scrollIntoView({ behavior: 'smooth' });
+    }, 0);
+  };
 
   const renderPage = () => {
     switch (currentPage) {
       case 'catalog':
-        return (
-          <Catalog
-            onOpenEra={(eraId) => {
-              setSelectedEra(eraId);
-              setCurrentPage('article');
-            }}
-          />
-        );
-      case 'article':
-        return <Article eraId={selectedEra} />;
+        return <Catalog />;
       case 'about':
         return <About />;
       case 'contact':
@@ -39,10 +34,7 @@ function App() {
         return (
           <Home
             onNavigate={setCurrentPage}
-            onOpenEra={(eraId) => {
-              setSelectedEra(eraId);
-              setCurrentPage('article');
-            }}
+            onOpenEra={openCatalogEra}
           />
         );
     }
@@ -54,11 +46,10 @@ function App() {
         <nav className="top-nav" aria-label="Navegacion principal">
           {pages.map((page) => (
             <button
-              className={activePage === page.id ? 'active' : ''}
+              className={currentPage === page.id ? 'active' : ''}
               key={page.id}
               onClick={() => {
                 setCurrentPage(page.id);
-                setSelectedEra(null);
               }}
               type="button"
             >

@@ -1,6 +1,8 @@
 import naturalFolderImage from '../assets/images/inicio/carpeta.png';
 import { eras } from '../data/eras';
 
+const homeTitle = 'RIDÍCULO';
+
 const homeEraImages = {
   'era-natural': naturalFolderImage,
   'era-digital': naturalFolderImage,
@@ -12,7 +14,17 @@ function Home({ onNavigate, onOpenEra }) {
     <main className="page home-page">
       <section className="home-hero">
         <div className="home-title-block">
-          <h1>RID&Iacute;CULO</h1>
+          <h1 aria-label={homeTitle}>
+            {Array.from(homeTitle).map((letter, index) => (
+              <span
+                aria-hidden="true"
+                key={`${letter}-${index}`}
+                style={{ '--title-letter-index': index }}
+              >
+                {letter}
+              </span>
+            ))}
+          </h1>
           <div className="dictionary-entry" aria-label="Definicion de ridiculo">
             <p className="dictionary-origin">
               <em>Del lat. ridiculus.</em>

@@ -31,6 +31,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Era Natural";
+  src: url("./assets/fonts/fuente_era_natural.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Era Digital";
+  src: url("./assets/fonts/fuente_era_digital.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Era Consumismo";
+  src: url("./assets/fonts/fuente_era_consumismo.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --color-base: #211f1f;
   --color-text: #b7a8a8;

@@ -9,16 +9,31 @@ function Article({ eraId }) {
         <header className="article-header">
           <p className="eyebrow">{era.kicker}</p>
           <h1>{era.title}</h1>
+          <h2>{era.workTitle}</h2>
           <p>{era.summary}</p>
         </header>
 
         <div className="article-body">
-          {era.sections.map((section) => (
-            <section key={section.title}>
-              <h2>{section.title}</h2>
-              <p>{section.content}</p>
-            </section>
-          ))}
+          <section>
+            <h2>Sobre la obra</h2>
+            <div className="article-copy">
+              {era.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </section>
+
+          <section className="article-credits">
+            <h2>Créditos</h2>
+            <dl>
+              {era.credits.map(([role, name]) => (
+                <div key={role}>
+                  <dt>{role}</dt>
+                  <dd>{name}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
         </div>
       </article>
     </main>
