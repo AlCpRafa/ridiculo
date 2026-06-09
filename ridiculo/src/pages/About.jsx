@@ -8,6 +8,7 @@ import digitalThree from '../assets/images/sobre_mi/digital3.jpg';
 import naturalOne from '../assets/images/sobre_mi/natural2.jpg';
 import naturalTwo from '../assets/images/sobre_mi/natural3.jpg';
 import naturalThree from '../assets/images/sobre_mi/natural4.JPEG';
+import { renderBrandText } from '../utils/brandText';
 
 const imageGroups = {
   natural: [naturalOne, naturalTwo, naturalThree],
@@ -110,7 +111,7 @@ function About() {
         <div className="about-masthead">
           <h1>
             <span>Sobre</span>
-            <span>Ridículo</span>
+            <span>{renderBrandText('Ridículo')}</span>
           </h1>
           <div className="about-masthead-meta" aria-hidden="true">
             <span>Revista web</span>
@@ -123,7 +124,7 @@ function About() {
           <h2>Declaración de intenciones</h2>
           <div>
             <p>
-              Ridículo surge de la necesidad de observar aquello que, con el
+              {renderBrandText('Ridículo')} surge de la necesidad de observar aquello que, con el
               paso del tiempo, ha sido aceptado como normal sin apenas
               cuestionamiento. A través del lenguaje audiovisual, el proyecto
               propone una mirada crítica hacia problemáticas contemporáneas que
@@ -148,7 +149,7 @@ function About() {
                 visuales capaces de generar preguntas en el espectador.
               </p>
               <p>
-                Concebido como una revista web y fanzine audiovisual, RIDÍCULO
+                Concebido como una revista web y fanzine audiovisual, <em className="brand-inline">RIDÍCULO</em>
                 utiliza cada edición para abordar una temática diferente desde
                 un enfoque experimental y autoral. Cada pieza combina vídeo,
                 animación, diseño gráfico, fotografía y sonido para construir
@@ -236,7 +237,7 @@ function About() {
           <div>
             <h2>Otra perspectiva</h2>
             <p>
-              Ridículo no pretende ofrecer respuestas cerradas. Su objetivo es
+              {renderBrandText('Ridículo')} no pretende ofrecer respuestas cerradas. Su objetivo es
               abrir espacios de reflexión, cuestionar aquello que se da por
               hecho y utilizar lo audiovisual como un medio para pensar el
               presente desde otra perspectiva.

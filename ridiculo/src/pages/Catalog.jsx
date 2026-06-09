@@ -1,22 +1,28 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import naturalVideoFrame from '../assets/images/catalogo/fondo_video_era_natural.png';
-import digitalVideoFrame from '../assets/images/catalogo/fondo_video_era_digital.jpg';
+import digitalVideoFrame from '../assets/images/catalogo/fondo_video_era_digital.png';
 import consumoVideoFrame from '../assets/images/catalogo/fondo_video_era_consumo.jpg';
 import naturalDecorImage from '../assets/images/catalogo/imagen_era_natural.png';
 import digitalDecorImage from '../assets/images/catalogo/imagen_era_digital.png';
+import consumoDecorImage from '../assets/images/catalogo/imagen_era_consumo.png';
+import naturalVideo from '../assets/videos/vídeo_era_natural.mp4';
+import digitalVideo from '../assets/videos/video_era_digital.mp4';
 import { catalogIntroduction, eras } from '../data/eras';
+import { renderBrandText } from '../utils/brandText';
 
 const catalogAssets = {
   'era-natural': {
     image: naturalDecorImage,
     videoFrame: naturalVideoFrame,
+    videoSrc: naturalVideo,
   },
   'era-digital': {
     image: digitalDecorImage,
     videoFrame: digitalVideoFrame,
+    videoSrc: digitalVideo,
   },
   'era-consumismo': {
-    image: null,
+    image: consumoDecorImage,
     videoFrame: consumoVideoFrame,
   },
 };
@@ -24,6 +30,18 @@ const catalogAssets = {
 function Catalog() {
   const digitalLayoutRef = useRef(null);
   const digitalCanvasRef = useRef(null);
+  const [activeVideo, setActiveVideo] = useState(null);
+
+  const videoGalleryItems = useMemo(
+    () =>
+      eras
+        .map((era) => ({
+          ...era,
+          ...catalogAssets[era.id],
+        }))
+        .filter((era) => Boolean(era.videoSrc)),
+    [],
+  );
 
   const paintDigitalCanvas = () => {
     const canvas = digitalCanvasRef.current;
@@ -53,11 +71,19 @@ function Catalog() {
         const wave = Math.sin(column * 1.83 + row * 4.27);
         const grain = Math.sin(column * 12.91 + row * 7.37);
         const noise = Math.abs(wave * 0.58 + grain * 0.42);
-        const colorIndex = Math.min(colors.length - 1, Math.floor(noise * colors.length));
+        const colorIndex = Math.min(
+          colors.length - 1,
+          Math.floor(noise * colors.length),
+        );
 
         context.globalAlpha = 1;
         context.fillStyle = colors[colorIndex];
-        context.fillRect(Math.floor(x), Math.floor(y), pixelSize + 0.5, pixelSize + 0.5);
+        context.fillRect(
+          Math.floor(x),
+          Math.floor(y),
+          pixelSize + 0.5,
+          pixelSize + 0.5,
+        );
         column += 1;
       }
 
@@ -90,6 +116,32 @@ function Catalog() {
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    if (activeVideo === null) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setActiveVideo(null);
+      if (event.key === 'ArrowLeft') {
+        setActiveVideo((current) =>
+          current === 0 ? videoGalleryItems.length - 1 : current - 1,
+        );
+      }
+      if (event.key === 'ArrowRight') {
+        setActiveVideo((current) => (current + 1) % videoGalleryItems.length);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeVideo, videoGalleryItems.length]);
 
   const scrollToEra = (eraId) => {
     document.getElementById(eraId)?.scrollIntoView({ behavior: 'smooth' });
@@ -127,6 +179,22 @@ function Catalog() {
     digitalLayoutRef.current?.classList.remove('is-active');
   };
 
+  const openVideo = (eraId) => {
+    const index = videoGalleryItems.findIndex((item) => item.id === eraId);
+
+    if (index !== -1) setActiveVideo(index);
+  };
+
+  const showPreviousVideo = () => {
+    setActiveVideo((current) =>
+      current === 0 ? videoGalleryItems.length - 1 : current - 1,
+    );
+  };
+
+  const showNextVideo = () => {
+    setActiveVideo((current) => (current + 1) % videoGalleryItems.length);
+  };
+
   return (
     <main className="page catalog-page">
       <section className="catalog-introduction">
@@ -135,7 +203,7 @@ function Catalog() {
         <div>
           {catalogIntroduction.map((paragraph, index) => (
             <p className={index === 4 ? 'catalog-mantra' : ''} key={paragraph}>
-              {paragraph}
+              {renderBrandText(paragraph)}
             </p>
           ))}
         </div>
@@ -171,34 +239,66 @@ function Catalog() {
               <section className="catalog-article-copy">
                 <h3>Sobre la obra</h3>
                 <div
-                  className={`catalog-era-layout catalog-era-layout--${era.id}${assets.image ? '' : ' catalog-era-layout--no-image'}`}
-                  onPointerEnter={era.id === 'era-digital' ? (event) => {
-                    digitalLayoutRef.current?.classList.add('is-active');
-                    moveDigitalCursor(event);
-                  } : undefined}
-                  onPointerLeave={era.id === 'era-digital' ? hideDigitalCursor : undefined}
-                  onPointerMove={era.id === 'era-digital' ? moveDigitalCursor : undefined}
+                  className={`catalog-era-layout catalog-era-layout--${era.id}${
+                    assets.image ? '' : ' catalog-era-layout--no-image'
+                  }`}
+                  onPointerEnter={
+                    era.id === 'era-digital'
+                      ? (event) => {
+                          digitalLayoutRef.current?.classList.add('is-active');
+                          moveDigitalCursor(event);
+                        }
+                      : undefined
+                  }
+                  onPointerLeave={
+                    era.id === 'era-digital' ? hideDigitalCursor : undefined
+                  }
+                  onPointerMove={
+                    era.id === 'era-digital' ? moveDigitalCursor : undefined
+                  }
                   ref={era.id === 'era-digital' ? digitalLayoutRef : undefined}
                 >
                   {era.id === 'era-digital' ? (
                     <div className="catalog-era-text catalog-era-text--digital">
                       {era.paragraphs.map((paragraph) => (
-                        <p key={paragraph}>{paragraph}</p>
+                        <p key={paragraph}>{renderBrandText(paragraph)}</p>
                       ))}
-                      <canvas className="catalog-digital-pixel-layer" ref={digitalCanvasRef} aria-hidden="true" />
+                      <canvas
+                        aria-hidden="true"
+                        className="catalog-digital-pixel-layer"
+                        ref={digitalCanvasRef}
+                      />
+                    </div>
+                  ) : era.id === 'era-consumismo' ? (
+                    <div className="catalog-era-text catalog-era-text--consumo">
+                      {era.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{renderBrandText(paragraph)}</p>
+                      ))}
                     </div>
                   ) : (
                     <div className="catalog-era-text">
                       {era.paragraphs.map((paragraph) => (
-                        <p key={paragraph}>{paragraph}</p>
+                        <p key={paragraph}>{renderBrandText(paragraph)}</p>
                       ))}
                     </div>
                   )}
 
                   {assets.image && (
                     <figure
-                      className={`catalog-era-image${era.id === 'era-natural' ? ' catalog-era-image--doors' : ''}${era.id === 'era-digital' ? ' catalog-era-image--digital' : ''}`}
-                      tabIndex={era.id === 'era-natural' || era.id === 'era-digital' ? '0' : undefined}
+                      className={`catalog-era-image${
+                        era.id === 'era-natural' ? ' catalog-era-image--doors' : ''
+                      }${era.id === 'era-digital' ? ' catalog-era-image--digital' : ''}${
+                        era.id === 'era-consumismo'
+                          ? ' catalog-era-image--consumo'
+                          : ''
+                      }`}
+                      tabIndex={
+                        era.id === 'era-natural' ||
+                        era.id === 'era-digital' ||
+                        era.id === 'era-consumismo'
+                          ? '0'
+                          : undefined
+                      }
                     >
                       {era.id === 'era-natural' ? (
                         <>
@@ -211,7 +311,23 @@ function Catalog() {
                         </>
                       ) : era.id === 'era-digital' ? (
                         <span className="catalog-digital-cursor">
-                          <img className="catalog-digital-cursor__base" src={assets.image} alt="" />
+                          <img
+                            className="catalog-digital-cursor__base"
+                            src={assets.image}
+                            alt=""
+                          />
+                        </span>
+                      ) : era.id === 'era-consumismo' ? (
+                        <span className="catalog-consumo-label">
+                          <img
+                            className="catalog-consumo-label__base"
+                            src={assets.image}
+                            alt=""
+                          />
+                          <span
+                            aria-hidden="true"
+                            className="catalog-consumo-label__scan"
+                          />
                         </span>
                       ) : (
                         <img src={assets.image} alt="" />
@@ -222,11 +338,37 @@ function Catalog() {
               </section>
 
               <section className="catalog-video-block" aria-label={`Vídeo de ${era.title}`}>
-                <img src={assets.videoFrame} alt="" />
-                <div>
-                  <span>Vídeo</span>
-                  <p>Próximamente</p>
-                </div>
+                {assets.videoSrc ? (
+                  <button
+                    className={`catalog-video-preview catalog-video-preview--${era.id}`}
+                    onClick={() => openVideo(era.id)}
+                    type="button"
+                  >
+                    <img src={assets.videoFrame} alt="" />
+                    <div className="catalog-video-preview__screen">
+                      <video
+                        aria-label={`Vista previa del vídeo ${era.workTitle}`}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        src={assets.videoSrc}
+                      />
+                    </div>
+                    <div className="catalog-video-preview__overlay">
+                      <span>Ver pieza</span>
+                      <p>{era.workTitle}</p>
+                    </div>
+                  </button>
+                ) : (
+                  <>
+                    <img src={assets.videoFrame} alt="" />
+                    <div>
+                      <span>Vídeo</span>
+                      <p>Próximamente</p>
+                    </div>
+                  </>
+                )}
               </section>
 
               <section className="catalog-article-credits">
@@ -244,6 +386,85 @@ function Catalog() {
           );
         })}
       </section>
+
+      {activeVideo !== null && (
+        <div
+          aria-label="Galería de vídeos"
+          aria-modal="true"
+          className="catalog-video-lightbox"
+          onClick={() => setActiveVideo(null)}
+          role="dialog"
+        >
+          <div
+            className="catalog-video-lightbox-content"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <header>
+              <p>
+                {videoGalleryItems[activeVideo].title}
+                <span>
+                  {String(activeVideo + 1).padStart(2, '0')} /{' '}
+                  {String(videoGalleryItems.length).padStart(2, '0')}
+                </span>
+              </p>
+              <button
+                aria-label="Cerrar galería de vídeos"
+                onClick={() => setActiveVideo(null)}
+                type="button"
+              >
+                ×
+              </button>
+            </header>
+
+            <div className="catalog-video-lightbox-stage">
+              <button
+                aria-label="Vídeo anterior"
+                onClick={showPreviousVideo}
+                type="button"
+              >
+                ←
+              </button>
+
+              <div className="catalog-video-lightbox-player">
+                <div className="catalog-video-lightbox-meta">
+                  <span>{videoGalleryItems[activeVideo].title}</span>
+                  <h3>{videoGalleryItems[activeVideo].workTitle}</h3>
+                </div>
+                <video
+                  autoPlay
+                  controls
+                  playsInline
+                  poster={videoGalleryItems[activeVideo].videoFrame}
+                  src={videoGalleryItems[activeVideo].videoSrc}
+                />
+              </div>
+
+              <button
+                aria-label="Vídeo siguiente"
+                onClick={showNextVideo}
+                type="button"
+              >
+                →
+              </button>
+            </div>
+
+            <div className="catalog-video-lightbox-thumbnails">
+              {videoGalleryItems.map((item, index) => (
+                <button
+                  aria-label={`Abrir vídeo ${item.workTitle}`}
+                  aria-pressed={activeVideo === index}
+                  key={item.id}
+                  onClick={() => setActiveVideo(index)}
+                  type="button"
+                >
+                  <img src={item.videoFrame} alt="" />
+                  <span>{item.workTitle}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

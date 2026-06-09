@@ -22,7 +22,7 @@ function Contact() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const subject = encodeURIComponent('Idea para colaborar en Ridiculo');
+    const subject = encodeURIComponent('Idea para colaborar en Ridículo');
     const body = encodeURIComponent(
       `Hola,\n\nSoy ${formData.name}.\n\n${formData.message}\n\nPuedes responderme en: ${formData.email}`,
     );
@@ -61,7 +61,7 @@ function Contact() {
               <span>Gmail</span>
               <strong>{contactEmail}</strong>
             </a>
-            <a href={instagramUrl} target="_blank" rel="noreferrer">
+            <a href={instagramUrl} rel="noreferrer" target="_blank">
               <span>Instagram</span>
               <strong>{instagramUser}</strong>
             </a>
