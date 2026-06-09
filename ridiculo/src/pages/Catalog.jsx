@@ -400,13 +400,22 @@ function Catalog() {
             onClick={(event) => event.stopPropagation()}
           >
             <header>
-              <p>
-                {videoGalleryItems[activeVideo].title}
-                <span>
-                  {String(activeVideo + 1).padStart(2, '0')} /{' '}
-                  {String(videoGalleryItems.length).padStart(2, '0')}
+              <div className="catalog-video-lightbox-heading">
+                <p>
+                  <span className="catalog-video-lightbox-title">
+                    {videoGalleryItems[activeVideo].title}
+                  </span>
+                  <span>
+                    {String(activeVideo + 1).padStart(2, '0')} /{' '}
+                    {String(videoGalleryItems.length).padStart(2, '0')}
+                  </span>
+                </p>
+                <span
+                  className={`catalog-video-lightbox-work catalog-video-lightbox-work--${videoGalleryItems[activeVideo].id}`}
+                >
+                  {videoGalleryItems[activeVideo].workTitle}
                 </span>
-              </p>
+              </div>
               <button
                 aria-label="Cerrar galería de vídeos"
                 onClick={() => setActiveVideo(null)}
@@ -426,10 +435,6 @@ function Catalog() {
               </button>
 
               <div className="catalog-video-lightbox-player">
-                <div className="catalog-video-lightbox-meta">
-                  <span>{videoGalleryItems[activeVideo].title}</span>
-                  <h3>{videoGalleryItems[activeVideo].workTitle}</h3>
-                </div>
                 <video
                   autoPlay
                   controls
@@ -458,7 +463,6 @@ function Catalog() {
                   type="button"
                 >
                   <img src={item.videoFrame} alt="" />
-                  <span>{item.workTitle}</span>
                 </button>
               ))}
             </div>

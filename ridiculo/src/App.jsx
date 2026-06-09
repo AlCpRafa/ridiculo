@@ -54,7 +54,7 @@ function App() {
                 }}
                 type="button"
               >
-                {renderBrandText(page.label)}
+                {page.id === 'about' ? page.label : renderBrandText(page.label)}
               </button>
               {index < pages.length - 1 ? (
                 <span aria-hidden="true" className="top-nav-separator" />
