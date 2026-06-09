@@ -1275,6 +1275,7 @@
 
 .about-page {
   width: min(100%, 1180px);
+  overflow-x: clip;
 }
 
 .about-header {
