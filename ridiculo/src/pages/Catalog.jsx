@@ -7,6 +7,7 @@ import digitalDecorImage from '../assets/images/catalogo/imagen_era_digital.png'
 import consumoDecorImage from '../assets/images/catalogo/imagen_era_consumo.png';
 import naturalVideo from '../assets/videos/vídeo_era_natural.mp4';
 import digitalVideo from '../assets/videos/video_era_digital.mp4';
+import consumoVideo from '../assets/videos/video_era_consumo.mp4';
 import { catalogIntroduction, eras } from '../data/eras';
 import { renderBrandText } from '../utils/brandText';
 
@@ -24,6 +25,7 @@ const catalogAssets = {
   'era-consumismo': {
     image: consumoDecorImage,
     videoFrame: consumoVideoFrame,
+    videoSrc: consumoVideo,
   },
 };
 
